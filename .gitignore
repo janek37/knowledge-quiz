@@ -95,3 +95,6 @@ Session.vim
 
 # Pycharm
 .idea/
+
+
+db.sqlite3
