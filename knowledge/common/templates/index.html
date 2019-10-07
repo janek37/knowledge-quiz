@@ -17,31 +17,34 @@
   <body>
     <div id="starting">
       <div class="container">
-        <div class="row">
-          <div v-for="(contestant, index) in contestants" class="contestant"
-               :class="{ current: index == currentContestantIndex }">
-            <div class="contestant-name">${contestant.name}</div>
-            <div class="contestant-points">${contestant.points}</div>
+        <div class="card-deck mt-5">
+          <div v-for="(contestant, index) in contestants" class="contestant card">
+            <h5 class="card-header text-center"
+                :class="{ 'text-white bg-primary': index == currentContestantIndex }">${contestant.name}</h5>
+            <div class="card-body text-center total">${contestant.points}</div>
           </div>
         </div>
-        <div class="inner-container">
-            <div class="categories" v-if="state == 'category'">
-                <div v-for="(category, index) in categories" v-on:click="chooseCategory(index)"
-                     :class="{ disabled: category.questions.length == 0 }">
+        <div class="inner-container mt-5">
+            <div class="categories btn-toolbar" v-if="state == 'category'">
+                <button v-for="(category, index) in categories" @click="chooseCategory(index)"
+                        class="category btn btn-primary mr-3 mt-3 col-md"
+                        :disabled="category.questions.length == 0">
                     ${category.name}
-                </div>
+                </button>
             </div>
             <div class="questions" v-if="state == 'question'">
-                <div v-for="(question, index) in currentCategory.questions" v-on:click="chooseQuestion(index)">
+                <button v-for="(question, index) in currentCategory.questions" @click="chooseQuestion(index)"
+                        class="btn mr-2 mt-2">
                     ${question.index}
-                </div>
+                </button>
             </div>
             <div class="question" v-if="state == 'answer'">
-                ${currentQuestion.content}
-                <div class="row">
-                    <div v-for="n in (currentCategory.max_points + 1)" v-on:click="addAnswer(n-1)" class="points">
+                <div class="question-text text-center">${currentQuestion.content}</div>
+                <div class="btn-group mt-3 float-right" role="group">
+                    <button v-for="n in (currentCategory.max_points + 1)" @click="addAnswer(n-1)"
+                            class="points btn btn-secondary">
                         ${n-1}
-                    </div>
+                    </button>
                 </div>
             </div>
         </div>
