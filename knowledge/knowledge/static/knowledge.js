@@ -52,26 +52,33 @@ new Vue({
             this.currentQuestion = this.currentCategory['questions'][i];
             this.state = 'answer';
         },
-        addAnswer: function(points) {
-            this.loading = true;
-            this.$http.post('/api/answer/', {
-                contestant: this.contestants[this.currentContestantIndex].id,
-                question: this.currentQuestion.id,
-                points: points
-            })
-                .then((response) => {
-                    this.loading = true;
-                    this.getContestants();
-                    this.getCategories();
-                    this.state = 'category';
-                    this.currentContestantIndex++;
-                    if (this.currentContestantIndex === this.contestants.length)
-                        this.currentContestantIndex = 0;
+        nextQuestion: function() {
+            this.state = 'category';
+            this.currentContestantIndex++;
+            if (this.currentContestantIndex === this.contestants.length)
+                this.currentContestantIndex = 0;
+        },
+        addAnswer: function (points) {
+            if (points > 0) {
+                this.loading = true;
+                this.$http.post('/api/answer/', {
+                    contestant: this.contestants[this.currentContestantIndex].id,
+                    question: this.currentQuestion.id,
+                    points: points
                 })
-                .catch((err) => {
-                    this.loading = false;
-                    console.log(err);
-                });
+                    .then(() => {
+                        this.loading = true;
+                        this.getContestants();
+                        this.getCategories();
+                        this.nextQuestion();
+                    })
+                    .catch((err) => {
+                        this.loading = false;
+                        console.log(err);
+                    });
+            } else {
+                this.nextQuestion();
+            }
         }
     }
 });
