@@ -1,4 +1,9 @@
 .category {
+    font-size: xx-large;
+    height: 100px;
+}
+
+.inner-container, .inner-container .btn {
     font-size: larger;
 }
 
