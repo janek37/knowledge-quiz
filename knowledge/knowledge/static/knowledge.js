@@ -51,6 +51,9 @@ new Vue({
             this.currentQuestion = this.currentCategory['questions'][i];
             this.state = 'answer';
         },
+        backToCategories: function() {
+            this.state = 'category';
+        },
         nextQuestion: function() {
             this.state = 'category';
             this.currentContestantIndex++;
