@@ -21,7 +21,7 @@ class Command(BaseCommand):
             for i, line in enumerate(file_path.open()):
                 if i == 0:
                     continue
-                question_text = line.strip().split('\t', 1)[0]
+                question_text = line.strip().split('\t', 2)[1]
                 index = (category.questions.aggregate(max=Max('index'))['max'] or 0) + 1
                 Question.objects.create(category=category, content=question_text.strip(), index=index)
                 count += 1
