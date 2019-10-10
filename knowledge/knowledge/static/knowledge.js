@@ -9,6 +9,7 @@ new Vue({
         currentQuestion: {},
         loading: true,
         state: 'category',
+        round_no: 1,
     },
     mounted: function() {
         this.getContestants();
@@ -58,8 +59,10 @@ new Vue({
         nextQuestion: function() {
             this.state = 'category';
             this.currentContestantIndex++;
-            if (this.currentContestantIndex === this.contestants.length)
+            if (this.currentContestantIndex === this.contestants.length) {
                 this.currentContestantIndex = 0;
+                this.round_no++;
+            }
         },
         keyHandler: function(event) {
             if (this.state === 'answer' && !isNaN(event.key)) {
