@@ -35,7 +35,7 @@
             </div>
             <div class="questions" v-if="state == 'question'">
               <button v-for="(question, index) in currentCategory.questions" @click="chooseQuestion(index)"
-                      class="btn btn-secondary mr-2 mt-2">
+                      class="btn btn-secondary btn-sq mr-3 mt-3">
                 ${question.index}
               </button>
               <div class="mt-3">
