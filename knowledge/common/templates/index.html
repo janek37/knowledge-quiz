@@ -24,6 +24,7 @@
           </div>
         </div>
         <div class="inner-container mt-5">
+            <div class="alert alert-primary" v-if="state != 'category'">${currentCategory.name}</div>
             <div class="categories btn-toolbar" v-if="state == 'category'">
               <button v-for="(category, index) in categories" @click="chooseCategory(index)"
                       class="category btn btn-primary mx-3 mt-3 col-md"
