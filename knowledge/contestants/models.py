@@ -6,6 +6,9 @@ from questions.models import Question
 class Contestant(models.Model):
     name = models.CharField(max_length=64)
 
+    class Meta:
+        ordering = ['id']
+
     def __str__(self):
         return self.name
 
