@@ -13,6 +13,7 @@ new Vue({
     mounted: function() {
         this.getContestants();
         this.getCategories();
+        window.addEventListener('keydown', this.keyHandler);
     },
     methods: {
         getContestants: function() {
@@ -42,7 +43,7 @@ new Vue({
                 })
         },
         chooseCategory: function(i) {
-            if (this.categories[i].questions.length > 0) {
+            if (this.categories[i]['questions'].length > 0) {
                 this.currentCategory = this.categories[i];
                 this.state = 'question';
             }
@@ -60,7 +61,15 @@ new Vue({
             if (this.currentContestantIndex === this.contestants.length)
                 this.currentContestantIndex = 0;
         },
-        addAnswer: function (points) {
+        keyHandler: function(event) {
+            if (this.state === 'answer' && !isNaN(event.key)) {
+                let num = Number(event.key);
+                if (num >= 0 && num <= this.currentCategory['max_points']) {
+                    this.addAnswer(num);
+                }
+            }
+        },
+        addAnswer: function(points) {
             if (points > 0) {
                 this.loading = true;
                 this.$http.post('/api/answer/', {

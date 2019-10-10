@@ -42,12 +42,6 @@
             </div>
             <div class="question" v-if="state == 'answer'">
               <div class="question-text text-center">${currentQuestion.content}</div>
-              <div class="btn-group mt-3 float-right" role="group">
-                <button v-for="n in (currentCategory.max_points + 1)" @click="addAnswer(n-1)"
-                        class="points btn btn-outline-secondary">
-                  ${n-1}
-                </button>
-              </div>
             </div>
         </div>
       </div>
