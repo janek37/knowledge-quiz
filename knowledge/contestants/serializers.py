@@ -7,7 +7,7 @@ class ContestantSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Contestant
-        fields = ['name', 'points', 'id']
+        fields = ['name', 'points', 'excluded', 'id']
 
 
 class AnswerSerializer(serializers.ModelSerializer):

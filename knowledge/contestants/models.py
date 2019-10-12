@@ -5,6 +5,7 @@ from questions.models import Question
 
 class Contestant(models.Model):
     name = models.CharField(max_length=64)
+    excluded = models.BooleanField(default=False)
 
     class Meta:
         ordering = ['id']

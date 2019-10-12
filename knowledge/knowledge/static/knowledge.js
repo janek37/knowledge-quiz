@@ -11,6 +11,11 @@ new Vue({
         state: 'category',
         round_no: 1,
     },
+    computed: {
+        currentContestant: function () {
+            return this.contestants[this.currentContestantIndex];
+        }
+    },
     mounted: function() {
         this.getContestants();
         this.getCategories();
@@ -20,7 +25,7 @@ new Vue({
         getContestants: function() {
             let api_url = '/api/contestant/';
             this.loading = true;
-            this.$http.get(api_url)
+            return this.$http.get(api_url)
                 .then((response) => {
                     this.contestants = response.data;
                     this.loading = false;
@@ -33,7 +38,7 @@ new Vue({
         getCategories: function() {
             let api_url = '/api/category/';
             this.loading = true;
-            this.$http.get(api_url)
+            return this.$http.get(api_url)
                 .then((response) => {
                     this.categories = response.data;
                     this.loading = false;
@@ -54,7 +59,8 @@ new Vue({
             this.state = 'answer';
         },
         backToCategories: function() {
-            this.state = 'category';
+            this.currentContestantIndex--;
+            this.nextQuestion();
         },
         nextQuestion: function() {
             this.state = 'category';
@@ -71,17 +77,36 @@ new Vue({
                     this.addAnswer(num);
                 }
             }
+            if (event.key === 'x') {
+                this.loading = true;
+                this.$http.patch('/api/contestant/'+this.currentContestant.id+'/', {
+                    excluded: true
+                })
+                    .then(() => {
+                        this.loading = false;
+                        this.getContestants().then(
+                            () => {
+                                this.currentContestantIndex--;
+                                this.nextQuestion();
+                            }
+                        );
+                    })
+                    .catch((err) => {
+                        this.loading = false;
+                        console.log(err);
+                    });
+            }
         },
         addAnswer: function(points) {
             if (points > 0) {
                 this.loading = true;
                 this.$http.post('/api/answer/', {
-                    contestant: this.contestants[this.currentContestantIndex].id,
+                    contestant: this.currentContestant.id,
                     question: this.currentQuestion.id,
                     points: points
                 })
                     .then(() => {
-                        this.loading = true;
+                        this.loading = false;
                         this.getContestants();
                         this.getCategories();
                         this.nextQuestion();

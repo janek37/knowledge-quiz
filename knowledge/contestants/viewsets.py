@@ -4,7 +4,7 @@ from .serializers import ContestantSerializer, AnswerSerializer
 
 
 class ContestantViewSet(viewsets.ModelViewSet):
-    queryset = Contestant.objects.all()
+    queryset = Contestant.objects.filter(excluded=False)
     serializer_class = ContestantSerializer
 
 
