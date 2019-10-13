@@ -5,6 +5,7 @@ new Vue({
         contestants: [],
         categories: [],
         currentContestantIndex: 0,
+        takingOverIndex: null,
         currentCategory: {},
         currentQuestion: {},
         loading: true,
@@ -13,7 +14,8 @@ new Vue({
     },
     computed: {
         currentContestant: function () {
-            return this.contestants[this.currentContestantIndex];
+            let index = this.takingOverIndex || this.currentContestantIndex;
+            return this.contestants[index];
         }
     },
     mounted: function() {
@@ -65,6 +67,7 @@ new Vue({
         nextQuestion: function() {
             this.state = 'category';
             this.currentContestantIndex++;
+            this.takingOverIndex = null;
             if (this.currentContestantIndex === this.contestants.length) {
                 this.currentContestantIndex = 0;
                 this.round_no++;
@@ -77,7 +80,7 @@ new Vue({
                     this.addAnswer(num);
                 }
             }
-            if (event.key === 'x') {
+            if (event.key === 'x' && this.state === 'category') {
                 this.loading = true;
                 this.$http.patch('/api/contestant/'+this.currentContestant.id+'/', {
                     excluded: true
@@ -117,6 +120,11 @@ new Vue({
                     });
             } else {
                 this.nextQuestion();
+            }
+        },
+        takeOver: function (contestantIndex) {
+            if (this.state === 'answer' && this.currentContestantIndex !== contestantIndex) {
+                this.takingOverIndex = contestantIndex;
             }
         }
     }
