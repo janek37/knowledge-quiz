@@ -34,16 +34,7 @@
                 ${category.name}
               </button>
             </div>
-            <div class="questions" v-if="state == 'question'">
-              <button v-for="(question, index) in currentCategory.questions" @click="chooseQuestion(index)"
-                      class="btn btn-secondary btn-sq mr-3 mt-3">
-                ${question.index}
-              </button>
-              <div class="mt-4">
-                <button class="btn btn-outline-primary btn-sq" @click="backToCategories()">←</button>
-              </div>
-            </div>
-            <div class="question" v-if="state == 'answer'">
+            <div class="question" v-if="state == 'question'">
               <div class="question-text text-center">${currentQuestion.content}</div>
             </div>
         </div>

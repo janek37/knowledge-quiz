@@ -24,6 +24,10 @@ new Vue({
         window.addEventListener('keydown', this.keyHandler);
     },
     methods: {
+        randomElement: function(array) {
+            let index = Math.floor(Math.random() * array.length);
+            return array[index];
+        },
         getContestants: function() {
             let api_url = '/api/contestant/';
             this.loading = true;
@@ -53,12 +57,9 @@ new Vue({
         chooseCategory: function(i) {
             if (this.categories[i]['questions'].length > 0) {
                 this.currentCategory = this.categories[i];
+                this.currentQuestion = this.randomElement(this.currentCategory['questions']);
                 this.state = 'question';
             }
-        },
-        chooseQuestion: function(i) {
-            this.currentQuestion = this.currentCategory['questions'][i];
-            this.state = 'answer';
         },
         backToCategories: function() {
             this.currentContestantIndex--;
@@ -74,13 +75,13 @@ new Vue({
             }
         },
         keyHandler: function(event) {
-            if (this.state === 'answer' && !isNaN(event.key)) {
+            if (this.state === 'question' && !isNaN(event.key)) {
                 let num = Number(event.key);
                 if (num >= 0 && num <= this.currentCategory['max_points']) {
                     this.addAnswer(num);
                 }
             }
-            if (event.key === 'x' && this.state === 'category') {
+            if (this.state === 'category' && event.key === 'x') {
                 this.loading = true;
                 this.$http.patch('/api/contestant/'+this.currentContestant.id+'/', {
                     excluded: true
@@ -119,7 +120,7 @@ new Vue({
                 });
         },
         takeOver: function (contestantIndex) {
-            if (this.state === 'answer' && this.currentContestantIndex !== contestantIndex) {
+            if (this.state === 'question' && this.currentContestantIndex !== contestantIndex) {
                 this.takingOverIndex = contestantIndex;
             }
         }
