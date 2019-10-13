@@ -101,26 +101,22 @@ new Vue({
             }
         },
         addAnswer: function(points) {
-            if (points > 0) {
-                this.loading = true;
-                this.$http.post('/api/answer/', {
-                    contestant: this.currentContestant.id,
-                    question: this.currentQuestion.id,
-                    points: points
+            this.loading = true;
+            this.$http.post('/api/answer/', {
+                contestant: this.currentContestant.id,
+                question: this.currentQuestion.id,
+                points: points
+            })
+                .then(() => {
+                    this.loading = false;
+                    this.getContestants();
+                    this.getCategories();
+                    this.nextQuestion();
                 })
-                    .then(() => {
-                        this.loading = false;
-                        this.getContestants();
-                        this.getCategories();
-                        this.nextQuestion();
-                    })
-                    .catch((err) => {
-                        this.loading = false;
-                        console.log(err);
-                    });
-            } else {
-                this.nextQuestion();
-            }
+                .catch((err) => {
+                    this.loading = false;
+                    console.log(err);
+                });
         },
         takeOver: function (contestantIndex) {
             if (this.state === 'answer' && this.currentContestantIndex !== contestantIndex) {
