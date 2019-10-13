@@ -31,7 +31,8 @@
               <button v-for="(category, index) in categories" @click="chooseCategory(index)"
                       class="category btn btn-primary mx-3 mt-3 col-md"
                       :disabled="category.questions.length == 0">
-                ${category.name}
+                <div>${category.name} (${category.max_points} pkt)</div>
+                <div class="questions-count">zostało: ${category.questions.length}</div>
               </button>
             </div>
             <div class="question" v-if="state == 'question'">
